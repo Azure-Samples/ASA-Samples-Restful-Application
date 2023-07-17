@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/alpha/azure.yaml.json
+
+name: asa-samples-restful-application
+metadata:
+  template: asa-samples-restful-application@0.0.1-beta
+services:
+  simple-todo-api:
+    project: ./
+    host: springapp
+    language: java
+    spring:
+      deploymentName: default

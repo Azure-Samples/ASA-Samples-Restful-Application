@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+  jackson:
+    date-format: com.microsoft.azure.simpletodo.configuration.RFC3339DateFormat
+    serialization: 
+      write-dates-as-timestamps: false
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        credential:
+          client-id: <your-application-ID-of-ToDo>
+        app-id-uri: <your-application-ID-URI-of-ToDo>
