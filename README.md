@@ -70,7 +70,7 @@ This section provides the steps to expose your RESTful APIs in Azure AD.
 
 1. Repeat the previous step to add two other scopes: `ToDo.Write` and `ToDo.Delete`.
 
-!["Screenshot of Expose an API of a RESTful API"](assets/expose-an-api.png)
+   !["Screenshot of Expose an API of a RESTful API"](assets/expose-an-api.png)
 
 #### Update the application configuration
 
@@ -144,7 +144,7 @@ This section provides the steps to register an application in Azure AD, which is
 
 1. Select **Grant admin consent for {your-tenant-name}** to grant admin consent for the permissions you added.
 
-!["Screenshot of API permissions of a web application"](assets/api-permissions.png)
+   !["Screenshot of API permissions of a web application"](assets/api-permissions.png)
 
 1. Navigate to **Certificates & secrets** and select the **New client secret**. On the **Add a client secret** page, enter a description for the secret, select an expiration date, and select **Add**.
 
