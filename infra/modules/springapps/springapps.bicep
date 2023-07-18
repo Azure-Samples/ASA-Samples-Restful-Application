@@ -42,7 +42,6 @@ resource asaApp 'Microsoft.AppPlatform/Spring/apps@2023-03-01-preview' = {
   parent: asaInstance
   properties: {
     public: true
-    activeDeploymentName: 'default'
   }
 }
 
