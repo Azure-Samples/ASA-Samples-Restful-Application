@@ -12,18 +12,24 @@ param location string
 @description('Relative Path of ASA Jar')
 param relativePath string
 
+@allowed([
+  'consumption'
+  'standard'
+])
+param plan string = 'consumption'
+
 @secure()
 @description('PSQL Server administrator password')
-param psqlAdminPassword string
+param psqlAdminPassword string = 'SuperAdminPassword1!'
 
 @secure()
 @description('Application user password')
-param psqlUserPassword string
+param psqlUserPassword string = 'SuperUserPassword1!'
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
-var asaInstanceName = '${abbrs.springApps}${resourceToken}'
 var asaManagedEnvironmentName = '${abbrs.appContainerAppsManagedEnvironment}${resourceToken}'
+var asaInstanceName = '${abbrs.springApps}${resourceToken}'
 var appName = 'simple-todo-api'
 var psqlServerName = '${abbrs.postgresServer}${resourceToken}'
 var databaseName = 'Todo'
@@ -58,15 +64,30 @@ module postgresql 'modules/postgresql/flexibleserver.bicep' = {
   }
 }
 
-module springApps 'modules/springapps/springapps.bicep' = {
-  name: '${deployment().name}--asa'
+module springAppsConsumption 'modules/springapps/springappsConsumption.bicep' = if (plan == 'consumption') {
+  name: '${deployment().name}--asaconsumption'
+  scope: resourceGroup(rg.name)
+  params: {
+    location: location
+	appName: appName
+	tags: tags
+	asaManagedEnvironmentName: asaManagedEnvironmentName
+	asaInstanceName: asaInstanceName
+	relativePath: relativePath
+	databaseUsername: psqlUserName
+	databasePassword: psqlUserPassword
+	datasourceUrl: datasourceJdbcUrl
+  }
+}
+
+module springAppsStandard 'modules/springapps/springappsStandard.bicep' = if (plan == 'standard') {
+  name: '${deployment().name}--asastandard'
   scope: resourceGroup(rg.name)
   params: {
     location: location
 	appName: appName
 	tags: tags
 	asaInstanceName: asaInstanceName
-	asaManagedEnvironmentName: asaManagedEnvironmentName
 	relativePath: relativePath
 	databaseUsername: psqlUserName
 	databasePassword: psqlUserPassword

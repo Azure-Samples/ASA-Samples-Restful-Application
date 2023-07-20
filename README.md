@@ -20,6 +20,8 @@ description: A RESTful API ToDo app on Azure Spring Apps with Azure Database for
 
 A blueprint for getting a RESTful API app with a Java API and a PostgreSQL - Flexible Server on Azure, the RESTful APIs are protected by [Azure Active Directory](https://review.learn.microsoft.com/azure/active-directory/fundamentals/active-directory-whatis) (Azure AD). The blueprint includes sample application code (a ToDo web api app) which can be removed and replaced with your own application code. Add your own source code and leverage the Infrastructure as Code assets (written in Bicep) to get up and running quickly. This architecture is for running containerized apps or microservices on a serverless platform.
 
+This sample project is a simplified version based on the [Simple Todo](https://github.com/Azure-Samples/ASA-Samples-Web-Application) web application, which only provides the backend service and uses Azure AD to protect the RESTful APIs.
+
 Let's jump in and get this up and running in Azure. When you are finished, you will have a RESTful API web app deployed to the cloud. In later steps, you'll see how to setup a pipeline and run the application.
 
 ### Prerequisites
@@ -115,13 +117,21 @@ azd init --template Azure-Samples/ASA-Samples-Restful-Application
 azd up
 ```
 
+The template uses [ASA consumption](https://learn.microsoft.com/azure/spring-apps/overview#standard-consumption-and-dedicated-plan) plan by default. If you want to switch to `Standard` plan, you can use the following command before running `azd up`.
+
+```bash
+azd env set PLAN standard
+```
+
+If you have already provisioned the resources with the consumption plan and want to try the Standard plan, you need to run `azd down` first to delete the resources, and then run the above command and `azd up` again to provision and deploy.
+
 #### Request an access token
 
-The RESTful APIs acts as a resource server, which is protected by Azure AD. Before acquiring an access token, it's required to register another application in Azure AD and grant permissions to the client application, which is named `SimpleToDoWebApp`.
+The RESTful APIs acts as a resource server, which is protected by Azure AD. Before acquiring an access token, it's required to register another application in Azure AD and grant permissions to the client application, which is named `ToDoWeb`.
 
 ##### Register the client application
 
-This section provides the steps to register an application in Azure AD, which is used to add the permissions of app `SimpleToDoApi`.
+This section provides the steps to register an application in Azure AD, which is used to add the permissions of app `ToDo`.
 
 1. Sign in to the [Azure portal](https://portal.azure.com/).
 
@@ -166,6 +176,8 @@ This section provides the steps to create a member user in your Azure AD, then t
    > 1. New users must complete the first login authentication and update their passwords, otherwise, you will receive an `AADSTS50055: The password is expired` error when you get the access token.
    > 2. When a new user logs in, they will receive an **Action Required** prompt, you may choose to **Ask later** to skip the validation.
 
+1. Select **Review + create** to review your selections. Select **Create** to create the user.
+
 ##### Obtain the access token
 
 This section provides the steps to use [OAuth 2.0 Resource Owner Password Credentials](https://review.learn.microsoft.com/azure/active-directory/develop/v2-oauth-ropc.md) method to obtain an access token in Azure AD, then access the RESTful APIs of the app `ToDo`.
@@ -193,7 +205,7 @@ This section provides the steps to access the RESTful APIs of the app `ToDo`.
 1. Define the following variables for HTTP requests:
 
    ```shell
-   export EXPOSED_APPLICATION_URL=<your-app-exposed-application-url>
+   export EXPOSED_APPLICATION_URL=<your-app-exposed-application-url-or-endpoint>
    export BEARER_TOKEN=<access-token-from-previous-step>
    ```
 
