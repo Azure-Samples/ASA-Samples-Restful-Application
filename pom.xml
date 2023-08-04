@@ -11,12 +11,13 @@
 
   <artifactId>simple-todo-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>RESTful API for SimpleTodo</name>
+  <name>RESTful APIs for SimpleTodo</name>
   <description>RESTful API for Simple Todo application</description>
 
   <properties>
     <java.version>17</java.version>
     <version.spring.cloud.azure>4.6.0</version.spring.cloud.azure>
+    <version.springdoc.openapi.ui>1.7.0</version.springdoc.openapi.ui>
   </properties>
 
   <dependencies>
@@ -58,6 +59,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <version>${version.springdoc.openapi.ui}</version>
     </dependency>
   </dependencies>
 

@@ -5,6 +5,8 @@ import com.microsoft.azure.simpletodo.model.TodoList;
 import com.microsoft.azure.simpletodo.model.TodoState;
 import com.microsoft.azure.simpletodo.repository.TodoItemRepository;
 import com.microsoft.azure.simpletodo.repository.TodoListRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +51,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Write')")
     @PostMapping("/lists/{listId}/items")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<TodoItem> createItem(@PathVariable("listId") Long listId,
                                                @Valid @RequestBody(required = false) TodoItem todoItem) {
         Optional<TodoList> optionalTodoList = todoListRepository.findById(listId);
@@ -75,6 +78,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Write')")
     @PostMapping("/lists")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<TodoList> createList(@Valid @RequestBody(required = false) TodoList todoList) {
         TodoList savedTodoList = todoListRepository.save(todoList);
         URI location = ServletUriComponentsBuilder
@@ -95,6 +99,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Delete')")
     @DeleteMapping("/lists/{listId}/items/{itemId}")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<Void> deleteItemById(@PathVariable("listId") Long listId,
                                                @PathVariable("itemId") Long itemId) {
         Optional<TodoItem> todoItem = getTodoItem(listId, itemId);
@@ -115,6 +120,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Delete')")
     @DeleteMapping("/lists/{listId}")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<Void> deleteListById(@PathVariable("listId") Long listId) {
         Optional<TodoList> todoList = todoListRepository.findById(listId);
         if (todoList.isPresent()) {
@@ -135,6 +141,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Read')")
     @GetMapping("/lists/{listId}/items/{itemId}")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<TodoItem> getItemById(@PathVariable("listId") Long listId,
                                                 @PathVariable("itemId") Long itemId) {
         return getTodoItem(listId, itemId).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -151,6 +158,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Read')")
     @GetMapping("/lists/{listId}/items")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<List<TodoItem>> getItemsByListId(
             @PathVariable("listId") Long listId,
             @Valid @RequestParam(value = "top", required = false, defaultValue = "20") BigDecimal top,
@@ -175,6 +183,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Read')")
     @GetMapping("/lists/{listId}/items/state/{state}")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<List<TodoItem>> getItemsByListIdAndState(
             @PathVariable("listId") Long listId,
             @PathVariable("state") TodoState state,
@@ -194,6 +203,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Read')")
     @GetMapping("/lists/{listId}")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<TodoList> getListById(@PathVariable("listId") Long listId) {
         return todoListRepository.findById(listId).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -207,6 +217,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Read')")
     @GetMapping("/lists")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<List<TodoList>> getLists(
             @Valid @RequestParam(value = "top", required = false) BigDecimal top,
             @Valid @RequestParam(value = "skip", required = false) BigDecimal skip) {
@@ -231,6 +242,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Write')")
     @PutMapping("/lists/{listId}/items/{itemId}")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<TodoItem> updateItemById(
             @PathVariable("listId") Long listId,
             @PathVariable("itemId") Long itemId,
@@ -252,6 +264,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Write')")
     @PutMapping("/lists/{listId}/items/state/{state}")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<Void> updateItemsStateByListId(
             @PathVariable("listId") Long listId,
             @PathVariable("state") TodoState state,
@@ -273,6 +286,7 @@ public class TodoListsController {
      */
     @PreAuthorize("hasAuthority('SCOPE_ToDo.Write')")
     @PutMapping("/lists/{listId}")
+    @Operation(security = { @SecurityRequirement(name = "Azure AD") })
     public ResponseEntity<TodoList> updateListById(@PathVariable("listId") Long listId,
                                                    @Valid @RequestBody(required = false) TodoList todoList) {
         return todoListRepository
