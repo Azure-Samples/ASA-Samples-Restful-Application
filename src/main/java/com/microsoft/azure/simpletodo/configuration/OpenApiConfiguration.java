@@ -12,9 +12,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 
-
+/**
+ * Configuration for Spring doc OpenAPI (Swagger).
+ */
 @Configuration
 class OpenApiConfiguration {
+
+    private static final String AUTHORIZATION_URL = "https://login.microsoftonline.com/%s/oauth2/v2.0/authorize/";
+    private static final String TOKEN_URL = "https://login.microsoftonline.com/%s/oauth2/v2.0/token/";
 
     private final AadAuthenticationProperties properties;
 
@@ -29,27 +34,21 @@ class OpenApiConfiguration {
 
     @Bean
     OpenAPI customOpenAPI() {
-        OAuthFlow authorizationCode = new OAuthFlow();
-        authorizationCode.setAuthorizationUrl(String.format("https://login.microsoftonline.com/%s/oauth2/v2.0/authorize/",
-            properties.getProfile().getTenantId()));
-        authorizationCode.setRefreshUrl(String.format("https://login.microsoftonline.com/%s/oauth2/v2.0/token/",
-            properties.getProfile().getTenantId()));
-        authorizationCode.setTokenUrl(String.format("https://login.microsoftonline.com/%s/oauth2/v2.0/token/",
-            properties.getProfile().getTenantId()));
-        authorizationCode.setScopes(new Scopes()
+        OAuthFlow authorizationCodeFlow = new OAuthFlow();
+        authorizationCodeFlow.setAuthorizationUrl(String.format(AUTHORIZATION_URL, properties.getProfile().getTenantId()));
+        authorizationCodeFlow.setRefreshUrl(String.format(TOKEN_URL, properties.getProfile().getTenantId()));
+        authorizationCodeFlow.setTokenUrl(String.format(TOKEN_URL, properties.getProfile().getTenantId()));
+        authorizationCodeFlow.setScopes(new Scopes()
             .addString(properties.getAppIdUri() + "/ToDo.Read", "Read")
             .addString(properties.getAppIdUri() + "/ToDo.Write", "Write")
             .addString(properties.getAppIdUri() + "/ToDo.Delete", "Delete"));
         OAuthFlows oauthFlows = new OAuthFlows();
-        oauthFlows.authorizationCode(authorizationCode);
+        oauthFlows.authorizationCode(authorizationCodeFlow);
         SecurityScheme securityScheme = new SecurityScheme();
         securityScheme.setType(SecurityScheme.Type.OAUTH2);
         securityScheme.setFlows(oauthFlows);
         return new OpenAPI()
-            .info(new Info()
-                .title("RESTful APIs for SimpleTodo")
-                .version("0.0.1-SNAPSHOT"))
-            .components(new Components()
-                .addSecuritySchemes("Azure AD", securityScheme));
+            .info(new Info().title("RESTful APIs for SimpleTodo"))
+            .components(new Components().addSecuritySchemes("Azure AD", securityScheme));
     }
 }

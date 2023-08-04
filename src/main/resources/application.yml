@@ -16,14 +16,14 @@ spring:
       active-directory:
         enabled: true
         profile:
-          tenant-id: <your-Azure-AD-tenant-ID>
+          tenant-id: # <your-Azure-AD-tenant-ID>
         credential:
-          client-id: <your-application-ID-of-ToDo>
-        app-id-uri: <your-application-ID-URI-of-ToDo>
+          client-id: # <your-application-ID-of-ToDo>
+        app-id-uri: # <your-application-ID-URI-of-ToDo>
 
 # The following configuration is for integrating Swagger UI with Azure Active Directory
 server:
-  forward-headers-strategy: framework
+  forward-headers-strategy: framework # This is required for redirection with HTTPS.
 springdoc:
   swagger-ui:
     use-root-path: true
