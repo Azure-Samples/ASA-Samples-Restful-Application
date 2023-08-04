@@ -85,36 +85,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
-      <plugin>
-        <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-apps-maven-plugin</artifactId>
-        <version>1.18.0</version>
-        <configuration>
-          <subscriptionId>799c12ba-353c-44a1-883d-84808ebb2216</subscriptionId>
-          <resourceGroup>myresourcegroup</resourceGroup>
-          <clusterName>mynewasa</clusterName>
-          <appName>simple-todo-api</appName>
-          <isPublic>true</isPublic>
-          <deployment>
-            <cpu>1</cpu>
-            <memoryInGB>2</memoryInGB>
-            <instanceCount>1</instanceCount>
-            <runtimeVersion>Java 17</runtimeVersion>
-            <resources>
-              <resource>
-                <filtering/>
-                <mergeId/>
-                <targetPath/>
-                <directory>${project.basedir}/target</directory>
-                <includes>
-                  <include>*.jar</include>
-                </includes>
-              </resource>
-            </resources>
-          </deployment>
-        </configuration>
-      </plugin>
-
     </plugins>
   </build>
 </project>
