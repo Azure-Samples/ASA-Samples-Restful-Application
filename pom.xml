@@ -6,11 +6,11 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.7.8</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <artifactId>simple-todo-api</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <name>RESTful APIs for SimpleTodo</name>
   <description>RESTful API for Simple Todo application</description>
 
@@ -85,6 +85,19 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.1</version>
+        <configuration>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <developerConnection>scm:git:git@github.com:Azure-Samples/ASA-Samples-Restful-Application.git</developerConnection>
+    <tag>v0.0.1</tag>
+  </scm>
 </project>
