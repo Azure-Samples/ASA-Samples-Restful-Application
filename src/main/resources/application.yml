@@ -16,10 +16,10 @@ spring:
       active-directory:
         enabled: true
         profile:
-          tenant-id: 0a2ede99-b592-4e1c-a0ee-283b3a172a61
+          tenant-id: <your-Azure-AD-tenant-ID>
         credential:
-          client-id: 627e444a-dda5-48ff-b561-f2e5b9f74c3e
-        app-id-uri: api://simple-todo
+          client-id: <your-application-ID-of-ToDo>
+        app-id-uri: <your-application-ID-URI-of-ToDo>
 
 # The following configuration is for integrating Swagger UI with Azure Active Directory
 server:
