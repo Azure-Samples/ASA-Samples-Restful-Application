@@ -1,3 +1,6 @@
+server:
+  tomcat:
+    use-relative-redirects: true
 spring:
   datasource:
     url: jdbc:h2:mem:testdb
@@ -15,6 +18,19 @@ spring:
     azure:
       active-directory:
         enabled: true
+        profile:
+          tenant-id: <your-Azure-AD-tenant-ID>
         credential:
           client-id: <your-application-ID-of-ToDo>
         app-id-uri: <your-application-ID-URI-of-ToDo>
+
+spring-apps:
+  public-url: ${SPRING_APPS_PUBLIC_URL:http://localhost:8080}
+
+springdoc:
+  swagger-ui:
+    use-root-path: true
+    oauth2RedirectUrl: ${spring-apps.public-url}/swagger-ui/oauth2-redirect.html
+    oauth:
+      usePkceWithAuthorizationCodeGrant: true
+
