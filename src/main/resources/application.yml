@@ -1,6 +1,3 @@
-server:
-  tomcat:
-    use-relative-redirects: true
 spring:
   datasource:
     url: jdbc:h2:mem:testdb
@@ -24,13 +21,13 @@ spring:
           client-id: <your-application-ID-of-ToDo>
         app-id-uri: <your-application-ID-URI-of-ToDo>
 
-spring-apps:
-  public-url: ${SPRING_APPS_PUBLIC_URL:http://localhost:8080}
-
+# The following configuration is for integrating Swagger UI with Azure Active Directory
+server:
+  tomcat:
+    use-relative-redirects: true
+  forward-headers-strategy: framework
 springdoc:
   swagger-ui:
     use-root-path: true
-    oauth2RedirectUrl: ${spring-apps.public-url}/swagger-ui/oauth2-redirect.html
     oauth:
-      usePkceWithAuthorizationCodeGrant: true
-
+      use-pkce-with-authorization-code-grant: true
