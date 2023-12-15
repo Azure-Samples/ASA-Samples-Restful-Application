@@ -49,6 +49,6 @@ class OpenApiConfiguration {
         securityScheme.setFlows(oauthFlows);
         return new OpenAPI()
             .info(new Info().title("RESTful APIs for SimpleTodo"))
-            .components(new Components().addSecuritySchemes("Azure AD", securityScheme));
+            .components(new Components().addSecuritySchemes("Microsoft Entra ID", securityScheme));
     }
 }

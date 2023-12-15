@@ -18,11 +18,11 @@ description: A RESTful API ToDo app on Azure Spring Apps with Azure Database for
 <!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
 # RESTful API and PostgreSQL - Flexible Server on Azure Spring Apps
 
-A blueprint for getting a RESTful API app with a Java API and a PostgreSQL - Flexible Server on Azure, the RESTful APIs are protected by [Azure Active Directory](https://review.learn.microsoft.com/azure/active-directory/fundamentals/active-directory-whatis) (Azure AD). The blueprint includes sample application code (a ToDo web api app) which can be removed and replaced with your own application code. Add your own source code and leverage the Infrastructure as Code assets (written in Bicep) to get up and running quickly. This architecture is for running containerized apps or microservices on a serverless platform.
+A blueprint for getting a RESTful API app with a Java API and a PostgreSQL - Flexible Server on Azure, the RESTful APIs are protected by [Microsoft Entra ID](https://learn.microsoft.com/entra/fundamentals/whatis). The blueprint includes sample application code (a ToDo web api app) which can be removed and replaced with your own application code. Add your own source code and leverage the Infrastructure as Code assets (written in Bicep) to get up and running quickly. This architecture is for running containerized apps or microservices on a serverless platform.
 
-This sample project is a simplified version based on the [Simple Todo](https://github.com/Azure-Samples/ASA-Samples-Web-Application) web application, which only provides the backend service and uses Azure AD to protect the RESTful APIs.
+This sample project is a simplified version based on the [Simple Todo](https://github.com/Azure-Samples/ASA-Samples-Web-Application) web application, which only provides the backend service and uses Microsoft Entra ID to protect the RESTful APIs.
 
-Let's jump in and get this up and running in Azure. When you are finished, you will have a RESTful API web app deployed to the cloud. In later steps, you'll see how to setup a pipeline and run the application.
+Let's jump in and get this up and running in Azure. When you are finished, you will have a RESTful API web app deployed to the cloud. In later steps, you'll see how to set up a pipeline and run the application.
 
 ### Prerequisites
 
@@ -30,7 +30,7 @@ The following prerequisites are required to use this application. Please ensure 
 
 - [Azure Developer CLI](https://aka.ms/azd-install)
 - [Java 17 or later](https://learn.microsoft.com/en-us/java/openjdk/install) - for API backend
-- An Azure AD instance. For instructions on creating one, see [Quickstart: Create a new tenant in Azure AD](https://learn.microsoft.com/azure/active-directory/fundamentals/create-new-tenant).
+- A Microsoft Entra tenant. For instructions on creating one, see [Quickstart: Create a new tenant in Microsoft Entra ID](https://learn.microsoft.com/entra/fundamentals/create-new-tenant).
 - [Docker](https://docs.docker.com/get-docker/)
 - [Powershell 7](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3) if you use windows
 
@@ -38,19 +38,19 @@ The following prerequisites are required to use this application. Please ensure 
 
 #### Expose RESTful APIs
 
-This section provides the steps to expose your RESTful APIs in Azure AD.
+This section provides the steps to expose your RESTful APIs in Microsoft Entra ID.
 
 1. Sign in to the [Azure portal](https://portal.azure.com/).
 
 1. If you have access to multiple tenants, use the **Directory + subscription** filter !["Screenshot of Directories + Subscriptions"](assets/portal-directory-subscription-filter.png) to select the tenant in which you want to register an application.
 
-1. Search for and Select **Azure Active Directory**.
+1. Search for and Select **Microsoft Entra ID**.
 
 1. Under **Manage**, select **App registrations** > **New registration**.
 
 1. Enter a name for your application in the **Name** field, for example `Todo`. Users of your app might see this name, and you can change it later.
 
-1. For **Supported account types**, select **Accounts in any organizational directory (Any Azure AD directory - Multitenant) and personal Microsoft accounts**.
+1. For **Supported account types**, select **Accounts in any organizational directory (Microsoft Entra ID tenant - Multitenant) and personal Microsoft accounts**.
 
 1. Select **Register** to create the application.
 
@@ -76,7 +76,7 @@ This section provides the steps to expose your RESTful APIs in Azure AD.
 
 #### Update the application configuration
 
-This section provides the steps to update the YAML file to use your Azure AD registered application information to establish a relationship with the RESTful API application.
+This section provides the steps to update the YAML file to use your Microsoft Entra registered application information to establish a relationship with the RESTful API application.
 
 Update the configuration of `spring.cloud.azure.active-directory` in the configuration file. Be sure to replace the placeholders with your own values you created in the previous step.
 
@@ -86,7 +86,7 @@ spring:
     azure:
       active-directory:
         profile:
-          tenant-id: <your-Azure-AD-tenant-ID>
+          tenant-id: <your-Microsoft-Entra-tenant-ID>
         credential:
           client-id: <your-application-ID-of-ToDo>
         app-id-uri: <your-application-ID-URI-of-ToDo>
@@ -127,19 +127,19 @@ azd env set PLAN standard
 
 If you have already provisioned the resources with the consumption plan and want to try the Standard plan, you need to run `azd down` first to delete the resources, and then run the above command and `azd up` again to provision and deploy.
 
-#### Request an access token
+#### Obtain the access token
 
-The RESTful APIs acts as a resource server, which is protected by Azure AD. Before acquiring an access token, it's required to register another application in Azure AD and grant permissions to the client application, which is named `ToDoWeb`.
+The RESTful APIs acts as a resource server, which is protected by your Microsoft Entra tenant. Before acquiring an access token, it's required to register another application in your Microsoft Entra and grant permissions to the client application, which is named `ToDoWeb`.
 
 ##### Register the client application
 
-This section provides the steps to register an application in Azure AD, which is used to add the permissions of app `ToDo`.
+This section provides the steps to register an application in your Microsoft Entra tenant, which is used to add the permissions of app `ToDo`.
 
 1. Sign in to the [Azure portal](https://portal.azure.com/).
 
 1. If you have access to multiple tenants, use the **Directory + subscription** filter !["Switch tenant"](assets/portal-directory-subscription-filter.png) to select the tenant in which you want to register an application.
 
-1. Search for and Select **Azure Active Directory**.
+1. Search for and Select **Microsoft Entra ID**.
 
 1. Under **Manage**, select **App registrations** > **New registration**.
 
@@ -160,7 +160,7 @@ This section provides the steps to register an application in Azure AD, which is
 
 ##### Add user to access the RESTful APIs
 
-This section provides the steps to create a member user in your Azure AD, then the user can manage the data of ToDo application through RESTful APIs.
+This section provides the steps to create a member user in your Microsoft Entra tenant, then the user can manage the data of ToDo application through RESTful APIs.
 
 1. Under **Manage**, select **Users** > **New user** -> **Create new user**.
 
@@ -182,22 +182,22 @@ This section provides the steps to update the OAuth2 configuration for Swagger U
 
 1. Open the Azure Spring Apps instance in the Azure portal.
 
-1. Open your **Azure Active Directory** tenant in Azure portal, go to the registered app `ToDoWeb`.
+1. Open your Microsoft Entra tenant in Azure portal, go to the registered app `ToDoWeb`.
 
 1. Under **Manage**, select **Authentication**, select **Add a platform**, and then select **Single-page application**;
    use this format `<your-app-exposed-application-url-or-endpoint>/swagger-ui/oauth2-redirect.html` as the OAuth2
    redirect url in the **Redirect URIs** field, such as `https://simple-todo-api.xxxxxxxx-xxxxxxxx.xxxxxx.azurecontainerapps.io/swagger-ui/oauth2-redirect.html`, then select **Configure**.
 
-   !["Screenshot of SPA authentication in Azure AD"](assets/aad-spa-auth.png)
+   !["Screenshot of SPA authentication in Microsoft Entra ID"](assets/aad-spa-auth.png)
 
 ##### Obtain the access token
 
-This section provides the steps to use [OAuth 2.0 authorization code flow](https://review.learn.microsoft.com/azure/active-directory/develop/v2-oauth2-auth-code-flow.md) method to obtain an access token in Azure AD, then access the RESTful APIs of the app `ToDo`.
+This section provides the steps to use [OAuth 2.0 authorization code flow](https://review.learn.microsoft.com/azure/active-directory/develop/v2-oauth2-auth-code-flow.md) method to obtain an access token in your Microsoft Entra tenant, then access the RESTful APIs of the app `ToDo`.
 
 1. Open the URL exposed by the app, then select **Authorize** to prepare the OAuth2 authentication.
 
 1. In the pop-up **Available authorizations** window, enter the client id of the app `ToDoWeb` in the **client_id** field, and select all the scopes for **Scopes** field,
-   ignore the **client_secret** field, then select **Authorize** to redirect to the Azure AD login page.
+   ignore the **client_secret** field, then select **Authorize** to redirect to the Microsoft Entra sign-in page.
 
 1. After completing the login with the previous user, you will be returned to the following pop-up window:
 
